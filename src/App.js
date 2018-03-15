@@ -18,20 +18,29 @@ class App extends Component {
         <br/>
         <WizardForm
           initialValues={{
-            name: 'Some name',
-            email: '',
-            password: ''
+            name: 'John Doe',
+            email: 'email@example.com',
+            password: '123123'
           }}
-          handleSubmit={(values) => console.log('form submitted with values: ', values)}
+          handleSubmit={(values, { setSubmitting }) => {
+            console.log('form submitted with values: ', values)
+            setTimeout(() => setSubmitting(false), 2000);
+          }}
           controls={CustomWizardControls}
         >
           <Page validate={emailPasswordValidator}>
-            <Field name="email" type="text" placeholder="Email" component={CustomInput} />
-            <br/>
-            <Field name="password" type="password" placeholder="Password" component={CustomInput} />
+            <div>
+              <h3>Step 1</h3>
+              <Field name="email" type="text" placeholder="Email" component={CustomInput} />
+              <br/>
+              <Field name="password" type="password" placeholder="Password" component={CustomInput} />
+            </div>
           </Page>
           <Page validate={nameValidator}>
-            <Field name="name" type="text" placeholder="Name" component={CustomInput}  />
+            <div>
+              <h3>Step 2</h3>
+              <Field name="name" type="text" placeholder="Name" component={CustomInput} />
+            </div>
           </Page>
         </WizardForm>
       </div>

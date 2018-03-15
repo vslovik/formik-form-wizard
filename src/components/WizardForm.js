@@ -32,7 +32,7 @@ export default class WizardForm extends Component {
     const isLastPage = page === React.Children.count(children) - 1;
 
     if (isLastPage) {
-      return handleSubmit(values);
+      return handleSubmit(values, bag);
     } else {
       this.next(values);
       bag.setSubmitting(false);
@@ -63,18 +63,24 @@ export default class WizardForm extends Component {
 
     const PrevButton = this.props.prevButton;
     const NextButton = this.props.nextButton;
-    const Controles = this.props.controls;
+    const Controls = this.props.controls;
 
     return <Formik
       initialValues={values}
       enableReinitialize={false}
       onSubmit={this.handleSubmit}
       validate={this.validate}
-      render={({ values, errors, handleSubmit, isSubmitting, handleReset }) => (
+      render={({ values, errors, handleSubmit, isSubmitting, handleReset, submitForm }) => (
         <form onSubmit={handleSubmit}>
           {activePage}
           { this.props.controls
-            ? <Controles back={this.previous} isFirstPage={isFirstPage} isLastPage={isLastPage} />
+            ? <Controls
+                next={handleSubmit}
+                back={this.previous}
+                isFirstPage={isFirstPage}
+                isLastPage={isLastPage}
+                isSubmitting={isSubmitting}
+              />
             : <div>
               <PrevButton isFirstPage={isFirstPage} onClick={this.previous} />
               <br/>
