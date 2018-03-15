@@ -63,6 +63,7 @@ export default class WizardForm extends Component {
 
     const PrevButton = this.props.prevButton;
     const NextButton = this.props.nextButton;
+    const Controles = this.props.controls;
 
     return <Formik
       initialValues={values}
@@ -72,10 +73,14 @@ export default class WizardForm extends Component {
       render={({ values, errors, handleSubmit, isSubmitting, handleReset }) => (
         <form onSubmit={handleSubmit}>
           {activePage}
-          <br/>
-          <PrevButton isFirstPage={isFirstPage} onClick={this.previous} />
-          <br/>
-          <NextButton isLastPage={isLastPage} />
+          { this.props.controls
+            ? <Controles back={this.previous} isFirstPage={isFirstPage} isLastPage={isLastPage} />
+            : <div>
+              <PrevButton isFirstPage={isFirstPage} onClick={this.previous} />
+              <br/>
+              <NextButton isLastPage={isLastPage} />
+            </div>
+          }
           <pre>{JSON.stringify(values, null, 2)}</pre>
           <pre>{JSON.stringify(errors, null, 2)}</pre>
         </form>
