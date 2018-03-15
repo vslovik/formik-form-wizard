@@ -39,9 +39,10 @@ export function nameValidator(values) {
   return validateSync(schema, values);
 }
 
-export function emailValidator(values) {
+export function emailPasswordValidator(values) {
   const schema = Yup.object().shape({
-    email: Yup.string().required('Email is required').email()
+    email: Yup.string().required('Email is required').email(),
+    password: Yup.string().required('Password is required').min(4)
   });
 
   return validateAsync(schema, values);

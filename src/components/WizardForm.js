@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
 import { Formik } from 'formik';
-import Yup from 'yup';
 
 export function Page({ children }) {
-  return children;
+  return <div>{children}</div>;
 }
 
 export default class WizardForm extends Component {
@@ -32,8 +31,6 @@ export default class WizardForm extends Component {
     const { page } = this.state;
     const isLastPage = page === React.Children.count(children) - 1;
 
-    console.log('isLastPage', isLastPage);
-
     if (isLastPage) {
       return handleSubmit(values);
     } else {
@@ -59,7 +56,13 @@ export default class WizardForm extends Component {
   render() {
     const { handleSubmit, children, prevButton, nextButton } = this.props;
     const { page, values } = this.state;
+
     const activePage = React.Children.toArray(children)[page];
+    const isLastPage = page === React.Children.count(children) - 1;
+    const isFirstPage = page === 0;
+
+    const PrevButton = this.props.prevButton;
+    const NextButton = this.props.nextButton;
 
     return <Formik
       initialValues={values}
@@ -70,13 +73,20 @@ export default class WizardForm extends Component {
         <form onSubmit={handleSubmit}>
           {activePage}
           <br/>
-          {prevButton({onClick: this.previous})}
+          <PrevButton isFirstPage={isFirstPage} onClick={this.previous} />
           <br/>
-          {nextButton()}
+          <NextButton isLastPage={isLastPage} />
           <pre>{JSON.stringify(values, null, 2)}</pre>
           <pre>{JSON.stringify(errors, null, 2)}</pre>
         </form>
       )}
       />
     }
+}
+
+WizardForm.defaultProps = {
+  nextButton: ({isLastPage}) => <button type="submit">{isLastPage ? 'Next' : 'Finish'}</button>,
+  prevButton: ({ onClick, isFirstPage }) => {
+    return isFirstPage ? <button onClick={onClick}>Previos</button> : null
+  }
 }
