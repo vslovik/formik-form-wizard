@@ -10,25 +10,20 @@ function validateSync(schema, values) {
     let preparedErrors = {};
     errors.inner.map((error) => preparedErrors[error.path] = error.message)
 
-    console.log(values, preparedErrors);
     return preparedErrors;
   }
 }
 
 // Async validation
 function validateAsync(schema, values) {
-  return new Promise(
-    (resolve, reject) => {
-      schema.validate(values, {abortEarly: false})
-        .then(() => resolve())
-        .catch((errors) => {
-          let preparedErrors = {};
-          errors.inner.map((error) => preparedErrors[error.path] = error.message)
+  return schema.validate(values, {abortEarly: false})
+    .then(() => undefined)
+    .catch((errors) => {
+      let preparedErrors = {};
+      errors.inner.map((error) => preparedErrors[error.path] = error.message)
 
-          reject(preparedErrors);
-        });
-    }
-  )
+      throw preparedErrors;
+    });
 }
 
 export function nameValidator(values) {
